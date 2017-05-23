@@ -10,6 +10,9 @@ module Spree
         if params[:mark_down][:taxon_ids].present?
           params[:mark_down][:taxon_ids] = params[:mark_down][:taxon_ids].split(',')
         end
+        if params[:mark_down][:skip_taxon_ids].present?
+          params[:mark_down][:skip_taxon_ids] = params[:mark_down][:skip_taxon_ids].split(',')
+        end
       end
     end
   end
