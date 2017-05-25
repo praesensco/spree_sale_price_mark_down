@@ -1,0 +1,26 @@
+<% if resource.products_affected.any? %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">
+      <%= resource.products_affected.size %> <%= 'product'.pluralize(resource.products_affected.size) %> filtered by the selectod conditions
+    </h1>
+  </div>
+  <table class="table">
+    <thead>
+      <tr data-hook="admin_pages_index_headers">
+        <th><%= Spree::Product.human_attribute_name(:name) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% resource.products_affected.limit(100).order(name: asc).each do |product| %>
+        <tr data-hook="admin_pages_index_rows" class="<%= cycle('odd', 'even') %>" id="<%= dom_id product %>">
+          <td><%= link_to product.try(:name), edit_admin_product_path(product) %></td>
+        </tr>
+      <% end %>
+      <% if resource.products_affected.size > 100 %>
+        <tr><td colspan="3">(<%= resource.products_affected.size - 100 %> products hidden)</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>

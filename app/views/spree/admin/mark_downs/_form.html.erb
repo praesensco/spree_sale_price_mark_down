@@ -30,10 +30,10 @@
         <%= f.field_container :taxons, class: ['form-group'] do %>
           <%= f.label :taxon_ids, Spree.t(:taxons) %>
           <% if can? :modify, Spree::Classification %>
-            <%= f.hidden_field :taxon_ids, value: @mark_down.taxon_ids.join(','), id: 'mark_down_taxon_ids' %>
-          <% elsif @mark_down.taxons.any? %>
+            <%= f.hidden_field :taxon_ids, value: resource.taxon_ids.join(','), id: 'mark_down_taxon_ids' %>
+          <% elsif resource.taxons.any? %>
             <ul class="text_list">
-              <% @mark_down.taxons.each do |taxon| %>
+              <% resource.taxons.each do |taxon| %>
                 <li><%= taxon.name %></li>
               <% end %>
             </ul>
@@ -47,10 +47,10 @@
         <%= f.field_container :taxons, class: ['form-group'] do %>
           <%= f.label :skip_taxon_ids, Spree.t(:skip_taxons) %>
           <% if can? :modify, Spree::Classification %>
-            <%= f.hidden_field :skip_taxon_ids, value: @mark_down.skip_taxon_ids.join(','), id: 'mark_down_skip_taxon_ids' %>
-          <% elsif @mark_down.skip_taxons.any? %>
+            <%= f.hidden_field :skip_taxon_ids, value: resource.skip_taxon_ids.join(','), id: 'mark_down_skip_taxon_ids' %>
+          <% elsif resource.skip_taxons.any? %>
             <ul class="text_list">
-              <% @mark_down.skip_taxons.each do |taxon| %>
+              <% resource.skip_taxons.each do |taxon| %>
                 <li><%= taxon.name %></li>
               <% end %>
             </ul>

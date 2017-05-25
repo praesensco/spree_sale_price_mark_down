@@ -2,4 +2,9 @@
   <%= Spree.t(:editing_resource, resource: 'Mark Down') %>
 <% end %>
 
+<% content_for :page_actions do %>
+  <% # = button_link_to Spree.t(:apply), admin_mark_down_apply_path(@mark_down), icon: 'send', class: 'btn-primary', id: 'admin_new_mark_down' %>
+<% end %>
+
 <%= render 'form', resource: @mark_down %>
+<%= render 'products_affected', resource: @mark_down %>

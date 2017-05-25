@@ -17,7 +17,7 @@ class InitSpreeSalePriceMarkDown < ActiveRecord::Migration
 
     create_table :spree_mark_downs_skip_taxons, id: false do |t|
       t.belongs_to :mark_down, index: { name: "index_skip_taxons_on_spree_mark_down_id"}
-      t.belongs_to :taxon, index: true
+      t.belongs_to :skip_taxon, index: true, class_name: 'Spree::Taxon'
     end
   end
 end
