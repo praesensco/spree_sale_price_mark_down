@@ -14,13 +14,25 @@ module Spree
 
     def find_mark_down(reload = false)
       return nil if @no_mark_down && !reload
-      md = Spree::MarkDown
-        .joins(:taxons).where("spree_mark_downs_taxons.taxon_id IN (?)", taxon_ids_for_mark_down)
-        .joins(:skip_taxons).where.not("spree_mark_downs_skip_taxons.skip_taxon_id IN (?)", taxon_ids_for_mark_down_skip)
-        .active
-        .first
+
+      md = Spree::MarkDown.connection.select_one(
+      "SELECT
+        spree_mark_downs.id
+      FROM
+        spree_mark_downs
+        INNER JOIN spree_mark_downs_taxons ON spree_mark_downs_taxons.mark_down_id = spree_mark_downs.id
+        INNER JOIN spree_taxons ON spree_taxons.id = spree_mark_downs_taxons.taxon_id
+        LEFT JOIN spree_mark_downs_skip_taxons ON spree_mark_downs_skip_taxons.mark_down_id = spree_mark_downs.id AND spree_mark_downs_skip_taxons.skip_taxon_id IN (#{taxon_ids_for_mark_down_skip.join(',')})
+        LEFT JOIN spree_taxons skip_taxons_spree_mark_downs ON skip_taxons_spree_mark_downs.id = spree_mark_downs_skip_taxons.skip_taxon_id
+      WHERE
+        spree_mark_downs_taxons.taxon_id IN (#{taxon_ids_for_mark_down.join(',')})
+        AND spree_mark_downs_skip_taxons.mark_down_id IS NULL
+      ORDER BY spree_mark_downs.created_at ASC"
+      )
+
       @no_mark_down = md.blank?
-      md
+
+      Spree::MarkDown.find_by(id: md['id']) if md.present?
     end
 
     def mark_down_sale_price_exists?
