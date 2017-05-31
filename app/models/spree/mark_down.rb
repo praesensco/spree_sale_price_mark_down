@@ -7,7 +7,7 @@ module Spree
       class_name: "Spree::Taxon"
 
     default_scope { order(created_at: :asc) }
-    scope :active, -> { where(active: true) }
+    scope :active, -> { where('active IS TRUE AND (start_at IS NULL OR start_at < ?) AND (stop_at IS NULL OR stop_at > ?)', Time.zone.now, Time.zone.now) }
 
     def active?
       active && (start_at.nil? || start_at < Time.zone.now) && (stop_at.nil? || stop_at > Time.zone.now)
