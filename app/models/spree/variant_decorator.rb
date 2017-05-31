@@ -27,6 +27,7 @@ module Spree
       WHERE
         spree_mark_downs_taxons.taxon_id IN (#{taxon_ids_for_mark_down.join(',')})
         AND spree_mark_downs_skip_taxons.mark_down_id IS NULL
+        AND spree_mark_downs.active = true
       ORDER BY spree_mark_downs.created_at ASC"
       )
 
@@ -41,6 +42,12 @@ module Spree
 
     def mark_down_sale_price
       mark_down.calculate_sale_price(self) unless mark_down.blank?
+    end
+
+    def cost_price
+      return self[:cost_price] * (1 - mark_down.amount/100) if mark_down.present?
+
+      self[:cost_price]
     end
   end
 end
