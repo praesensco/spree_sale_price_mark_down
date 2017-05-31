@@ -28,6 +28,8 @@ module Spree
         spree_mark_downs_taxons.taxon_id IN (#{taxon_ids_for_mark_down.join(',')})
         AND spree_mark_downs_skip_taxons.mark_down_id IS NULL
         AND spree_mark_downs.active = true
+        AND (start_at IS NULL OR start_at < '#{Time.zone.now}')
+        AND (stop_at IS NULL OR stop_at > '#{Time.zone.now}')
       ORDER BY spree_mark_downs.created_at ASC"
       )
 
