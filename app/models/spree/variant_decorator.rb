@@ -13,7 +13,7 @@ module Spree
     end
 
     def find_mark_down(reload = false)
-      return nil if @no_mark_down && !reload
+      return nil if (@no_mark_down && !reload) || taxon_ids_for_mark_down.blank?
 
       md = Spree::MarkDown.connection.select_one(
       "SELECT
@@ -47,7 +47,7 @@ module Spree
     end
 
     def cost_price
-      return self[:cost_price] * (1 - mark_down.amount/100) if mark_down.present?
+      return self[:cost_price] * (1 - mark_down.amount/100) if self[:cost_price].present? && mark_down.present?
 
       self[:cost_price]
     end
